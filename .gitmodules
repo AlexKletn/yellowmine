@@ -1,0 +1,3 @@
+[submodule "yellowmine-gui"]
+	path = yellowmine-gui
+	url = git@github.com:AlexKletn/yellowmine-gui.git
