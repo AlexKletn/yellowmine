@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: yellowmine
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+    ports:
+      - "${YM_PORT}:3000"
+
+    env_file:
+      - .env
+    restart: always
