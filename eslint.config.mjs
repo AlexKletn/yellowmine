@@ -1,10 +1,10 @@
-import globals from 'globals';
-import stylistic from '@stylistic/eslint-plugin';
+import globals from "globals";
+import stylistic from "@stylistic/eslint-plugin";
 
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-import rules from './eslint-config/rules.js';
+import rules from "./eslint-config/rules.mjs";
 
 export default [
   ...tseslint.config(eslint.configs.recommended,
