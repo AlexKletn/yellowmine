@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: ../
+      dockerfile: ./ci/Dockerfile
+
+    ports:
+      - "3100:3000"
+
+    env_file:
+      - ../.env
+    restart: always

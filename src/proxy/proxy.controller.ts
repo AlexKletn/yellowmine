@@ -2,7 +2,7 @@ import { All, Controller, Req, Res } from "@nestjs/common";
 import { ProxyService } from "./proxy.service";
 import { Request, Response } from "express";
 
-@Controller('proxy')
+@Controller(['proxy', 'api'])
 export class ProxyController {
   constructor(private readonly proxyService: ProxyService) {
   }
@@ -12,7 +12,7 @@ export class ProxyController {
     const headerEntries = Object.entries(req.headers);
 
     const headers = Object.fromEntries(headerEntries.filter(([key]) => !['host', 'x-redmine-base'].includes(key as string)));
-    const url = req.url.replace(/^\/proxy/, '');
+    const url = req.url.replace(/^\/(proxy|api)/, '');
 
     const httpRequest = this.proxyService.proxy(req.method, url, {
       headers,

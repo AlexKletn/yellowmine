@@ -17,22 +17,9 @@ export class ProxyService {
 
       ...options,
     }).pipe(
-      catchError((err, res) => {
-        console.log('err', err);
+      catchError((err) => {
         return of(err.response);
       })
     );
-  }
-
-  proxyAdmin(method: string, url: string, { headers, ...options }: Omit<HttpModuleOptions, 'url' | 'method'> = {}) {
-    return this.proxy(method, url, {
-      headers: {
-        ...headers ?? {},
-
-        'x-redmine-api-key': process.env.REDMINE_ADMIN_API_KEY,
-      },
-
-      ...options,
-    })
   }
 }
