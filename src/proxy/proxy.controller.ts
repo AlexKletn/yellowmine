@@ -28,8 +28,6 @@ export class ProxyController {
           response.setHeader(key, value as string);
         })
 
-        console.log(url, response.getHeaders(), res.data);
-
         response.status(res.status).send(res.data);
       })
   }
