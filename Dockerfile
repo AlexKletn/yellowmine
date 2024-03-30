@@ -20,7 +20,7 @@ FROM node:20-alpine As build-gui
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
-COPY --chown=node:node ../yellowmine-gui .
+COPY --chown=node:node ./yellowmine-gui .
 
 RUN npm ci;
 RUN npm run build
