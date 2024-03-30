@@ -1,10 +1,17 @@
-import { All, Controller, Req, Res } from "@nestjs/common";
+import { All, Controller, Get, Req, Res } from "@nestjs/common";
 import { ProxyService } from "./proxy.service";
 import { Request, Response } from "express";
 
 @Controller(['proxy', 'api'])
 export class ProxyController {
   constructor(private readonly proxyService: ProxyService) {
+  }
+
+  @Get('/redmine-url')
+  getRedmineUrl(@Req() req: Request, @Res() res: Response) {
+    res.send({
+      url: process.env.REDMINE_URL
+    });
   }
 
   @All('*')

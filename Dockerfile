@@ -2,7 +2,7 @@ FROM node:20-alpine As development
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
-COPY .. .
+COPY . .
 RUN npm run build
 
 FROM node:20-alpine As build
@@ -13,7 +13,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm ci --only=production
-COPY .. .
+COPY . .
 COPY --from=development /usr/src/app/dist ./dist
 
 FROM node:20-alpine As build-gui
