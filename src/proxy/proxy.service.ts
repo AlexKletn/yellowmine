@@ -1,25 +1,25 @@
-import { Injectable } from "@nestjs/common";
-import { HttpModuleOptions, HttpService } from "@nestjs/axios";
-import * as process from "process";
-import { catchError, of } from "rxjs";
+import { Injectable } from '@nestjs/common';
+import { HttpModuleOptions, HttpService } from '@nestjs/axios';
+import * as process from 'process';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProxyService {
   constructor(private readonly http: HttpService) {
   }
 
-  proxy(method: string, url: string, options: Omit<HttpModuleOptions, 'url' | 'method'> = {}) {
-    return this.http.request({
+  async proxy(method: string, url: string, options: Omit<HttpModuleOptions, 'url' | 'method'> = {}) {
+    // console.log(mime.lookup(url), options);
+
+    return await firstValueFrom(this.http.request({
       baseURL: process.env.REDMINE_URL,
 
       method,
       url,
 
+      responseType: 'arraybuffer',
+
       ...options,
-    }).pipe(
-      catchError((err) => {
-        return of(err.response);
-      })
-    );
+    }));
   }
 }

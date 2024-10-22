@@ -1,41 +1,43 @@
-import { All, Controller, Get, Req, Res } from "@nestjs/common";
-import { ProxyService } from "./proxy.service";
-import { Request, Response } from "express";
+import { All, Controller, Req, Res } from '@nestjs/common';
+import { ProxyService } from './proxy.service';
+import { Request, Response } from 'express';
 
-@Controller(['proxy', 'api'])
+@Controller(['redmine'])
 export class ProxyController {
   constructor(private readonly proxyService: ProxyService) {
   }
 
-  @Get('/redmine-url')
-  getRedmineUrl(@Req() req: Request, @Res() res: Response) {
-    res.send({
-      url: process.env.REDMINE_URL
-    });
-  }
-
   @All('*')
-  proxy(@Req() req: Request, @Res() response: Response) {
+  async proxy(@Req() req: Request, @Res() response: Response) {
     const headerEntries = Object.entries(req.headers);
 
     const headers = Object.fromEntries(headerEntries.filter(([key]) => !['host', 'x-redmine-base'].includes(key as string)));
-    const url = req.url.replace(/^\/(proxy|api)/, '');
+    const url = req.url.replace(/^\/(redmine)/, '');
 
-    const httpRequest = this.proxyService.proxy(req.method, url, {
+    const proxyRequest = this.proxyService.proxy(req.method, url, {
       headers,
       params: req.query,
-      data: req.body
+      data: req.body,
     });
-    httpRequest
-      .subscribe((res) => {
-        const headersEntries = Object.entries(res.headers ?? {});
 
-        headersEntries.forEach(([key, value]) => {
-          if(!['content-length', 'x-redmine-base'].includes(key.toLowerCase())) {return}
-          response.setHeader(key, value as string);
-        })
+    proxyRequest.catch((err) => {
+      console.log(err);
+    });
+    const res = await proxyRequest;
 
-        response.status(res.status).send(res.data);
-      })
+    const headersEntries = Object.entries(res.headers ?? {});
+
+    headersEntries.forEach(([key, value]) => {
+      if ([
+        'transfer-encoding',
+      ].includes(key.toLowerCase())) {
+        return;
+      }
+      response.append(key, value as string);
+    });
+
+    // console.log(res.data.toString());
+
+    response.status(res.status).send(res.data);
   }
 }
