@@ -1,11 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ProxyController } from './proxy.controller';
-import { ProxyService } from './proxy.service';
-import { HttpModule } from '@nestjs/axios';
+import { HttpProxyModule } from 'nest-http-proxy';
+import 'dotenv/config';
 
+console.log(process.env.REDMINE_URL);
 @Module({
-  imports: [HttpModule],
-  controllers: [ProxyController],
-  providers: [ProxyService],
+  imports: [
+    HttpProxyModule.forRoot({
+      '/redmine': {
+        target: process.env.REDMINE_URL,
+        changeOrigin: true,
+        pathRewrite: {
+          '^redmine': '',
+        },
+      },
+    }),
+  ],
 })
 export class ProxyModule {}

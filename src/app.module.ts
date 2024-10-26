@@ -11,8 +11,6 @@ import { RedmineModule } from './redmine/redmine.module';
 import { RedmineConfigController } from './config/redmine-config.controller';
 import { RedmineConfigModule } from './config/redmine-config.module';
 
-console.log(__dirname);
-
 @Module({
   imports: [
     ConfigModule.forRoot(),
