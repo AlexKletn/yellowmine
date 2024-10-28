@@ -6,8 +6,6 @@ import { AppService } from './app.service';
 import { ProxyModule } from './proxy/proxy.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'node:path';
-import { RedmineController } from './redmine/redmine.controller';
-import { RedmineModule } from './redmine/redmine.module';
 import { RedmineConfigController } from './config/redmine-config.controller';
 import { RedmineConfigModule } from './config/redmine-config.module';
 
@@ -21,11 +19,9 @@ import { RedmineConfigModule } from './config/redmine-config.module';
       rootPath: resolve(__dirname, '../yellowmine-gui/dist/yellowmine-gui/browser'),
     }),
 
-    RedmineModule,
-
     RedmineConfigModule,
   ],
-  controllers: [AppController, RedmineController, RedmineConfigController],
+  controllers: [AppController, RedmineConfigController],
   providers: [AppService],
 })
 export class AppModule {}
